@@ -174,7 +174,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     const Text("Already have an account ? "),
                     GestureDetector(
                       onTap: () {
-                        _showMessage("Menuju ke halaman Sign In...");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                        );
                       },
                       child: const Text(
                         "Sign In",
