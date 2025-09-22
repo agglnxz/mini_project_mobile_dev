@@ -10,10 +10,11 @@
 * Halaman Registrasi (Create Account)
 Pada halaman ini digunakan untuk mendaftarkan akun baru dengan mengisi fullname, username, email, dan password. Data disimpan sementara di aplikasi, lalu setelah berhasil pengguna diarahkan ke halaman login.
 
-![WhatsApp Image 2025-09-22 at 15 39 39_26ae47f1](https://github.com/user-attachments/assets/0dd31182-a06c-4b23-ba54-66652beeff5c)
+![WhatsApp Image 2025-09-22 at 17 52 41_5af4d878](https://github.com/user-attachments/assets/8480aea8-8fde-48c5-8d91-55474c2c13db)
 
 * Halaman Login (Welcome Back)
 Pada halaman ini berfungsi untuk masuk ke aplikasi dengan memasukkan username dan password. Jika data sesuai dengan hasil registrasi, pengguna diarahkan ke halaman menu. Jika salah, muncul pesan error.
+
 
 
 * Halaman Menu (Menus) – Tampilan Awal
@@ -24,4 +25,4 @@ Menampilkan daftar makanan dan minuman lengkap dengan nama, harga, jumlah pesana
 * Halaman Menu (Menus) – Setelah Transaction
 Ketika tombol Transaction ditekan, aplikasi akan memproses pesanan dan langsung menampilkan notifikasi berupa snackbar dengan pesan “Transaction processed!” sebagai tanda bahwa transaksi berhasil dilakukan.
 
-![WhatsApp Image 2025-09-22 at 15 37 32_df52ba90](https://github.com/user-attachments/assets/b984574c-fc6d-493c-995d-58eb77316abc)
+![WhatsApp Image 2025-09-22 at 18 15 15_c4ccbeb5](https://github.com/user-attachments/assets/4f3d30de-d62e-493e-a65f-8a29f9cdc7c1)
