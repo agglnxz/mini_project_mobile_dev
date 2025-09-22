@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project_mobile_dev/data/user_data.dart';
-import 'package:mini_project_mobile_dev/register_page.dart';
+import 'package:mini_project_mobile_dev/menu_page.dart';
+import 'package:mini_project_mobile_dev/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,13 +21,10 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text;
 
     if (userData.containsKey(email) && userData[email]!['password'] == password) {
-      // langsung navigate ke MenuPage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => MenuPage(
-            fullName: userData[email]!['fullName']!,
-          ),
+          builder: (context) => MenuScreen(),
         ),
       );
     } else {
@@ -51,11 +49,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // biar layout naik saat keyboard muncul
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: SingleChildScrollView( // biar bisa di-scroll
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 60),
 
@@ -76,7 +76,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 40),
 
-              // Welcome text
               const Text(
                 'WELCOME BACK !',
                 style: TextStyle(
@@ -214,7 +213,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 30),
 
-              // Lost Password link
               TextButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -232,105 +230,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
-// Menu Page - halaman setelah login berhasil
-class MenuPage extends StatelessWidget {
-  final String fullName;
-
-  const MenuPage({
-    Key? key,
-    required this.fullName,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Menu Utama'),
-        backgroundColor: Colors.blue.shade500,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Selamat datang, $fullName!',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Ini adalah halaman menu utama setelah login berhasil.',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 30),
-            // Menu items
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                children: [
-                  _buildMenuCard('Profile', Icons.person, Colors.blue),
-                  _buildMenuCard('Settings', Icons.settings, Colors.green),
-                  _buildMenuCard('Shop', Icons.shopping_bag, Colors.orange),
-                  _buildMenuCard('History', Icons.history, Colors.purple),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuCard(String title, IconData icon, Color color) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 48, color: color),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
