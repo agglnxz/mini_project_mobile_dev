@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:mini_project_mobile_dev/data/user_data.dart';
+import 'package:mini_project_mobile_dev/data/user_data.dart';
+import 'package:mini_project_mobile_dev/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -37,17 +38,17 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // if (userData.containsKey(email)) {
-    //   _showMessage("Email sudah terdaftar!");
-    //   return;
-    // }
+    if (userData.containsKey(email)) {
+      _showMessage("Email sudah terdaftar!");
+      return;
+    }
 
-    // // Simpan data ke userData
-    // userData[email] = {
-    //   "fullName": fullname,
-    //   "username": username,
-    //   "password": password,
-    // };
+    // Simpan data ke userData
+    userData[email] = {
+      "fullName": fullname,
+      "username": username,
+      "password": password,
+    };
 
     _showMessage("Registrasi berhasil untuk $fullname");
 
@@ -100,22 +101,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 TextField(
                   controller: fullnameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Fullname",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: UnderlineInputBorder(), // garis bawah
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 TextField(
                   controller: usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Username",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: UnderlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -123,11 +120,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: UnderlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -135,11 +130,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextField(
                   controller: passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Password",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: UnderlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -147,14 +140,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextField(
                   controller: confirmPasswordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Confirm Password",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: UnderlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 25),
+
 
                 SizedBox(
                   width: double.infinity,
