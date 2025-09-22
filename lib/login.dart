@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mini_project_mobile_dev/data/user_data.dart';
+import 'package:mini_project_mobile_dev/register.dart';
 
-class User {
-  final String fullname;
-  final String username;
-  final String email;
-  final String password;
-
-  User({
-    required this.fullname,
-    required this.username,
-    required this.email,
-    required this.password,
-  });
-}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,168 +11,326 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  // Data contoh
-  final List<User> registeredUsers = [
-    User(
-      fullname: 'inandiar',
-      username: 'iyang',
-      email: 'inandiar',
-      password: 'inandiar',
-    ),
-  ];
+  bool _obscurePassword = true;
 
   void _login() {
-    final username = _usernameController.text.trim();
-    final password = _passwordController.text.trim();
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
-    User? userFound;
-    for (var user in registeredUsers) {
-      if (user.username == username && user.password == password) {
-        userFound = user;
-        break;
-      }
-    }
-
-    if (userFound != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Login Berhasil! Selamat datang ${userFound.fullname}'),
-          backgroundColor: Colors.green,
+    if (userData.containsKey(email) && userData[email]!['password'] == password) {
+      // langsung navigate ke MenuPage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MenuPage(
+            fullName: userData[email]!['fullName']!,
+          ),
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Username atau password salah.'),
-          backgroundColor: Colors.red,
-        ),
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Login Gagal'),
+            content: const Text('Email atau password salah.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
       );
     }
-  }
-
-
-  void _register() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Tombol Register ditekan (belum ada halaman)"),
-        backgroundColor: Colors.blue,
-      ),
-    );
-  }
-
-  void _lostPassword() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Lost Password ditekan"),
-        backgroundColor: Colors.orange,
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      backgroundColor: Colors.white,
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 80.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo dengan icon tas
-              const Icon(
-                Icons.shopping_bag,
-                size: 80,
-                color: Colors.blue,
+              const SizedBox(height: 60),
+
+              // Shopping bag icon
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade500,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.shopping_bag,
+                  color: Colors.white,
+                  size: 40,
+                ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
 
-              // Judul
+              // Welcome text
               const Text(
-                'WELCOME BACK!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'WELCOME BACK !',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  letterSpacing: 1.2,
+                ),
               ),
-              const SizedBox(height: 5),
 
-              // Subjudul
+              const SizedBox(height: 8),
+
               const Text(
                 'Sign in to continue',
-                style: TextStyle(color: Colors.blue, fontSize: 16),
-              ),
-              const SizedBox(height: 50),
-
-              // Username
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: UnderlineInputBorder(),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+
+              const SizedBox(height: 60),
+
+              // Username field
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'Username',
+                  hintStyle: TextStyle(color: Colors.grey.shade400),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue.shade500),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+              ),
+
               const SizedBox(height: 30),
 
-              // Password
+              // Password field
               TextField(
                 controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: UnderlineInputBorder(),
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: TextStyle(color: Colors.grey.shade400),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey.shade400,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue.shade500),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ),
-              const SizedBox(height: 50),
 
+              const SizedBox(height: 60),
+
+              // Login and Register buttons
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade500,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                        child: const Text('Login',
-                            style: TextStyle(color: Colors.white)),
+                        elevation: 0,
                       ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: _register,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                        child: const Text('Register',
-                            style: TextStyle(color: Colors.white)),
                       ),
-                    ],
+                    ),
                   ),
 
-                  // Lost Password
-                  TextButton(
-                    onPressed: _lostPassword,
-                    child: const Text(
-                      'Lost Password ?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.blue.shade500,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(color: Colors.blue.shade500),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: const Text(
+                        'Register',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ],
+              ),
+
+              const SizedBox(height: 30),
+
+              // Lost Password link
+              TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fitur reset password akan segera tersedia'),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Lost Password ?',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Menu Page - halaman setelah login berhasil
+class MenuPage extends StatelessWidget {
+  final String fullName;
+
+  const MenuPage({
+    Key? key,
+    required this.fullName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Menu Utama'),
+        backgroundColor: Colors.blue.shade500,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Selamat datang, $fullName!',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Ini adalah halaman menu utama setelah login berhasil.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 30),
+            // Menu items
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                children: [
+                  _buildMenuCard('Profile', Icons.person, Colors.blue),
+                  _buildMenuCard('Settings', Icons.settings, Colors.green),
+                  _buildMenuCard('Shop', Icons.shopping_bag, Colors.orange),
+                  _buildMenuCard('History', Icons.history, Colors.purple),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuCard(String title, IconData icon, Color color) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 48, color: color),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
