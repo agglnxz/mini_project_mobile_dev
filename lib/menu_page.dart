@@ -96,8 +96,26 @@ class _MenuScreenState extends State<MenuScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        const snackBar = SnackBar(content: Text('Transaction processed!'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: const Text("Transaksi"),
+                              content: const Text("Transaksi berhasil diproses!"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Tutup pop up
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,

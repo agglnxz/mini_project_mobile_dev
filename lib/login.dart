@@ -63,10 +63,14 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: 80,
                 height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade500,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: const Icon(
                   Icons.shopping_bag,
-                  color: Colors.blue,
-                  size: 80,
+                  color: Colors.white,
+                  size: 40,
                 ),
               ),
 
